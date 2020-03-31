@@ -13,7 +13,7 @@ public:
     struct Pos
     {
         int x, y;
-        Pos(const Pos& p, int dx = 0, int dy = 0);
+        Pos(const Pos& p, int dx, int dy);
         Pos(int _x, int _y);
         bool operator<(const Pos& p) const;
         bool operator==(const Pos& p) const;

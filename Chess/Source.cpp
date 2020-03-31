@@ -43,9 +43,11 @@ int main()
                     if (fromAdded)
                     {
                         game.ConvertFromWindow(mousPos);
-                        game.PromptInput();
-                        pieces.AIMove();
-                        game.PrintBoard();
+                        if (game.PromptInput())
+                        {
+                            pieces.AIMove();
+                            game.PrintBoard();
+                        }
                         fromAdded = false;
                         break;
                     }

@@ -53,14 +53,10 @@ void ChessBoard::PrintBoard()
 
 bool ChessBoard::PromptInput()
 {
-illegalmove:
     if ((int)(*_pieces).GetTurn() == 0)
         std::cout << "White move: ";
     else
         std::cout << "Black move: ";
-
-    if (_move == "")
-        return false;
 
     Pieces::Pos from(-1, -1), to(-1, -1);
 
@@ -75,7 +71,7 @@ illegalmove:
     if (!(*_pieces).MakeMove(from, to))
     {
         _move = "";
-        goto illegalmove;
+        return false;
     }
     _move = "";
     PrintBoard();
@@ -87,5 +83,6 @@ void ChessBoard::ConvertFromWindow(sf::Vector2i mousPos)
     std::string tmp;
     tmp = std::to_string((int)(std::ceil(mousPos.x / _boardCell.width)) + 1);
     tmp += std::to_string((int)(8 - std::ceil(mousPos.y / _boardCell.heigth)));
+    std::cout << tmp << std::endl;
     _move += tmp;
 }
