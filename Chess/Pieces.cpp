@@ -80,7 +80,10 @@ void Pieces::Reset()
     {
         _whitePieces[Pos(1 + ((i - 1) % 3), 6 + int((i - 1) / 3))] = Piece::white_pawn;
         _blackPieces[Pos(6 + ((i - 1) % 3), 1 + int((i - 1) / 3))] = Piece::black_pawn;
+
     }
+
+    _aiStepDown = false;
 }
 
 void Pieces::FlipTurn()
@@ -140,30 +143,50 @@ std::vector<Pieces::Pos> Pieces::PossibleMoves(const Pos& from)
 
 void Pieces::AIMove()
 {
-    for (auto& from : MoverPieces())
+    for (int y = 8; y > 5; --y)
     {
-        if (true)
+        for (int x = 1; x < 4; ++x)
         {
+            if (!GetBlackPieces().count(Pieces::Pos(x, y)))
+            {
+                for (auto& piceToMove : MoverPieces())
+                {
+                    if (find(_winPosition.begin(), _winPosition.end(), piceToMove.first) != _winPosition.end())
+                        continue;
 
-        }
-        int x = from.first.x;
-        int y = from.first.y;
-        if (MakeMove(from.first, Pos(x, y + 1)))
-        {
-            return;
-        }
-        if (MakeMove(from.first, Pos(x - 1, y)))
-        {
-            return;
-        }
-        if (MakeMove(from.first, Pos(x, y - 1)))
-        {
-            return;
-        }
-        if (MakeMove(from.first, Pos(x + 1, y)))
-        {
-            return;
+                    int xOld = piceToMove.first.x;
+                    int yOld = piceToMove.first.y;
+
+                    if (!_aiStepDown)
+                    {
+                        if (MakeMove(piceToMove.first, Pos(xOld, yOld + 1)))
+                        {
+                            return;
+                        }
+                    }
+                    
+                    if (MakeMove(piceToMove.first, Pos(xOld - 1, yOld)))
+                    {
+                        _aiStepDown = false;
+                        return;
+                    }
+                    if (MakeMove(piceToMove.first, Pos(xOld, yOld - 1)))
+                    {
+                        _aiStepDown = true;
+                        return;
+                    }
+                    if (MakeMove(piceToMove.first, Pos(xOld + 1, yOld)))
+                    {
+                        return;
+                    }
+                }
+            }
+            if (find(_winPosition.begin(), _winPosition.end(), Pos(x, y)) == _winPosition.end())
+            {
+                _winPosition.push_back(Pos(x, y));
+            }
         }
     }
+    
 }
 

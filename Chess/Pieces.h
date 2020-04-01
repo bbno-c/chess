@@ -30,6 +30,10 @@ private:
 
     std::map<Pos, Piece> _whitePieces, _blackPieces;
 
+    std::vector<Pos> _winPosition;
+
+    bool _aiStepDown;
+
 public:
     
     std::map<Pos, Piece>& GetWhitePieces();
